@@ -6,6 +6,7 @@ import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClientBuilder;
 
 public class ClientApp {
@@ -41,18 +42,26 @@ public class ClientApp {
             .build();
     }
     
-    public static void main(String[] args){
+    
+    
+    public static void main(String[] args) throws Exception{
+    	
+    	init();
     	
     	//Create Bucket
-    	S3Bucket bucket = new S3Bucket(s3);
-    	String bucket_name = "karine_mellata" + S3Bucket.generateKey();
-    	S3Bucket.createBucket(bucket_name);
+    	S3Bucket s3bucket = new S3Bucket(s3);
+    	String bucket_name = "karine-mellata-" + s3bucket.generateKey();
+    	s3bucket.createBucket(bucket_name);
     	
     	//Upload file
-    	String pathname = "./img.png";
-    	S3Bucket.uploadObject(bucket_name, pathname);
+    	String pathname = "/Users/karinemellata/Downloads/img.png";
+    	String key = s3bucket.uploadObject(bucket_name, pathname);
     	
-    	//
+    	//Get object
+    	S3Object object = s3bucket.getObject(bucket_name, key);
+    	System.out.println("Content-Type: "  + object.getObjectMetadata().getContentType());
+    	
+    	s3bucket.deleteBucket(bucket_name);
     	
     }
 

@@ -21,11 +21,11 @@ public class S3Bucket {
 	
 	public static AmazonS3 s3;
 	
-	public S3Bucket(final AmazonS3 s3) {
+	public S3Bucket(AmazonS3 s3) {
 		S3Bucket.s3 = s3;
 	}
 	
-	public static Bucket getBucket(String bucket_name) {
+	public Bucket getBucket(String bucket_name) {
         Bucket named_bucket = null;
         List<Bucket> buckets = s3.listBuckets();
         for (Bucket b : buckets) {
@@ -36,34 +36,38 @@ public class S3Bucket {
         return named_bucket;
     }
 	
-    @SuppressWarnings("deprecation")
-	public static Bucket createBucket(String bucket_name) {
+	public Bucket createBucket(String bucket_name) {
         Bucket b = null;
-        if (s3.doesBucketExistV2(bucket_name)) {
-            System.out.format("Bucket %s already exists.\n", bucket_name);
-            b = getBucket(bucket_name);
-        } else {
-            try {
-            	System.out.println("Creating bucket " + bucket_name + "\n");
-                b = s3.createBucket(bucket_name);
-            } catch (AmazonS3Exception e) {
-                System.err.println(e.getErrorMessage());
-            }
+        try {
+            System.out.println("Creating bucket " + bucket_name + "\n");
+            b = s3.createBucket(bucket_name);
+            System.out.println("Bucket created!");
+        } catch (AmazonS3Exception e) {
+            System.err.println(e.getErrorMessage());
         }
         return b;
     }
     
-    public static String generateKey() {
+    public void deleteBucket(String bucket_name) {
+    	try {
+    		s3.deleteBucket(bucket_name);
+    	} catch (AmazonS3Exception e) {
+    	    System.err.println(e.getErrorMessage());
+    	}
+    }
+    
+    public String generateKey() {
     	return UUID.randomUUID().toString();
     }
     
-    public static String uploadObject(String bucket_name, String pathname) {
+    public String uploadObject(String bucket_name, String pathname) {
         String key = "";
 
         try {
-            
+        	System.out.println("Uploading file located at: " + pathname + " to bucket: " + bucket_name);
             // Upload a file as a new object with ContentType and title specified.
         	key = generateKey();
+        	System.out.println("Key is " + key);
             PutObjectRequest request = new PutObjectRequest(bucket_name, key, new File(pathname));
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("image");
@@ -84,7 +88,7 @@ public class S3Bucket {
         return key;
     }
     
-    public static S3Object getObject(String bucket_name, String key) {
+    public S3Object getObject(String bucket_name, String key) {
     	S3Object object = null;
         try {
         	object = s3.getObject(new GetObjectRequest(bucket_name, key));
