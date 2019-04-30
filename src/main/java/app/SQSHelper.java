@@ -27,8 +27,9 @@ public class SQSHelper {
 		CreateQueueResult result = null;
 		try {
 			System.out.println("Creating a new SQS queue called " + queue_name);
-			CreateQueueRequest createQueueRequest = new CreateQueueRequest(queue_name).addAttributesEntry("ReceiveMessageWaitTimeSeconds", "1");
-		    result = sqs.createQueue(createQueueRequest);
+			CreateQueueRequest createQueueRequest = new CreateQueueRequest(queue_name).addAttributesEntry("ReceiveMessageWaitTimeSeconds", "20");
+			System.out.println("Hello");
+			result = sqs.createQueue(createQueueRequest);
 		} catch (AmazonSQSException e) {
 		    if (!e.getErrorCode().equals("QueueAlreadyExists")) {
 		        throw e;
@@ -40,7 +41,7 @@ public class SQSHelper {
 		// Enable long polling on an existing queue
         SetQueueAttributesRequest set_attrs_request = new SetQueueAttributesRequest()
                 .withQueueUrl(queue_url)
-                .addAttributesEntry("ReceiveMessageWaitTimeSeconds", "1");
+                .addAttributesEntry("ReceiveMessageWaitTimeSeconds", "20");
         sqs.setQueueAttributes(set_attrs_request);
         
 		return queue_url;
@@ -55,7 +56,7 @@ public class SQSHelper {
         System.out.println("Receiving messages\n");
         ReceiveMessageRequest receive_request = new ReceiveMessageRequest()
                 .withQueueUrl(queue_url)
-                .withWaitTimeSeconds(2);
+                .withWaitTimeSeconds(20);
         List<Message> messages = sqs.receiveMessage(receive_request).getMessages();
         for (Message message : messages) {
             System.out.println("  Message");
@@ -69,14 +70,14 @@ public class SQSHelper {
         System.out.println("Deleting a message.\n");
         ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queue_url);
         List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
-        System.out.println(messages.size());
+        //System.out.println(messages.size());
         String messageReceiptHandle = messages.get(0).getReceiptHandle();
         sqs.deleteMessage(new DeleteMessageRequest(queue_url, messageReceiptHandle));
         sqs.deleteQueue(new DeleteQueueRequest(queue_url));
+        System.out.println("Deleting the queue:" + queue_url);
 	}
 	
 	public String getQueue() {
-		System.out.println("Listing all queues in your account.\n");
         return sqs.listQueues().getQueueUrls().get(0);
 	}
 	

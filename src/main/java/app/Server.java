@@ -47,5 +47,6 @@ public class Server {
     	
     	SQSHelper sqsHelper = new SQSHelper(sqs);
     	String queue_url = sqsHelper.getQueue();
+    	sqsHelper.receiveMessage(queue_url);
     }
 }

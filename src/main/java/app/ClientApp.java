@@ -75,9 +75,9 @@ public class ClientApp {
     	SQSHelper sqsHelper = new SQSHelper(sqs);
     	String queue_name = "karine-mellata";
     	String queue_url = sqsHelper.createQueue(queue_name);
-    	sqsHelper.sendMessage(queue_url, "hello");
+    	//sqsHelper.sendMessage(queue_url, "hello");
     	
-    	//sqsHelper.deleteQueue("https://sqs.us-west-2.amazonaws.com/061164283712/MyQueue");
+    	//sqsHelper.deleteQueue("https://sqs.us-west-2.amazonaws.com/061164283712/karine-mellata");
     }
 
 }
