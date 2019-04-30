@@ -67,12 +67,12 @@ public class SQSHelper {
 	
 	public void deleteQueue(String queue_url) {
 		// Delete a message
-        System.out.println("Deleting a message.\n");
-        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queue_url);
-        List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
-        //System.out.println(messages.size());
-        String messageReceiptHandle = messages.get(0).getReceiptHandle();
-        sqs.deleteMessage(new DeleteMessageRequest(queue_url, messageReceiptHandle));
+//        System.out.println("Deleting a message.\n");
+//        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(queue_url);
+//        List<Message> messages = sqs.receiveMessage(receiveMessageRequest).getMessages();
+//        //System.out.println(messages.size());
+//        String messageReceiptHandle = messages.get(0).getReceiptHandle();
+//        sqs.deleteMessage(new DeleteMessageRequest(queue_url, messageReceiptHandle));
         sqs.deleteQueue(new DeleteQueueRequest(queue_url));
         System.out.println("Deleting the queue:" + queue_url);
 	}
