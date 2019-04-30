@@ -77,7 +77,7 @@ public class SimpleQueueServiceSample {
         try {
             // Create a queue
             System.out.println("Creating a new SQS queue called MyQueue.\n");
-            CreateQueueRequest createQueueRequest = new CreateQueueRequest("MyQueue");
+            CreateQueueRequest createQueueRequest = new CreateQueueRequest("MyQueue").addAttributesEntry("ReceiveMessageWaitTimeSeconds", "1");;
             String myQueueUrl = sqs.createQueue(createQueueRequest).getQueueUrl();
 
             // List queues
@@ -88,8 +88,8 @@ public class SimpleQueueServiceSample {
             System.out.println();
 
             // Send a message
-            System.out.println("Sending a message to MyQueue.\n");
-            sqs.sendMessage(new SendMessageRequest(myQueueUrl, "This is my message text."));
+            //System.out.println("Sending a message to MyQueue.\n");
+            //sqs.sendMessage(new SendMessageRequest(myQueueUrl, "This is my message text."));
 
             // Receive messages
             System.out.println("Receiving messages from MyQueue.\n");

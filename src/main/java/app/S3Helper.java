@@ -17,12 +17,12 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 
-public class S3Bucket {
+public class S3Helper {
 	
 	public static AmazonS3 s3;
 	
-	public S3Bucket(AmazonS3 s3) {
-		S3Bucket.s3 = s3;
+	public S3Helper(AmazonS3 s3) {
+		S3Helper.s3 = s3;
 	}
 	
 	public Bucket getBucket(String bucket_name) {
