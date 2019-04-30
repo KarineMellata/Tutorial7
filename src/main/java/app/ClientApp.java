@@ -40,5 +40,20 @@ public class ClientApp {
             .withRegion("us-west-2")
             .build();
     }
+    
+    public static void main(String[] args){
+    	
+    	//Create Bucket
+    	S3Bucket bucket = new S3Bucket(s3);
+    	String bucket_name = "karine_mellata" + S3Bucket.generateKey();
+    	S3Bucket.createBucket(bucket_name);
+    	
+    	//Upload file
+    	String pathname = "./img.png";
+    	S3Bucket.uploadObject(bucket_name, pathname);
+    	
+    	//
+    	
+    }
 
 }
